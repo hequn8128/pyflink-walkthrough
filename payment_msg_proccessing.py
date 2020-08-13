@@ -37,8 +37,8 @@ def log_processing():
 
     es_sink_ddl = """
             CREATE TABLE es_sink (
-            province VARCHAR PRIMARY KEY,
-            pay_amount DOUBLE
+                province VARCHAR PRIMARY KEY,
+                pay_amount DOUBLE
             ) with (
                 'connector.type' = 'elasticsearch',
                 'connector.version' = '7',
