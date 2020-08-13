@@ -18,6 +18,20 @@ payPlatform: The platform used to pay the order, pc or mobile.
 provinceId: The id of the province for the user. 
 ```
 
+- Generator 
+
+A simple data generator is provided that continuously writes new records into Kafka. 
+You can use the following command to read data in kafka and check whether the data is generated correctly.
+
+```shell script
+$ docker-compose exec kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic payment_msg
+{"createTime":"2020-07-27 09:25:32.77","orderId":1595841867217,"payAmount":7732.44,"payPlatform":0,"provinceId":3}
+{"createTime":"2020-07-27 09:25:33.231","orderId":1595841867218,"payAmount":75774.05,"payPlatform":0,"provinceId":3}
+{"createTime":"2020-07-27 09:25:33.72","orderId":1595841867219,"payAmount":65908.55,"payPlatform":0,"provinceId":0}
+{"createTime":"2020-07-27 09:25:34.216","orderId":1595841867220,"payAmount":15341.11,"payPlatform":0,"provinceId":1}
+{"createTime":"2020-07-27 09:25:34.698","orderId":1595841867221,"payAmount":37504.42,"payPlatform":0,"provinceId":0}
+```
+
 - PyFlink
 
 The transaction data is processed by a PyFlink job, [payment_msg_proccessing.py](https://github.com/hequn8128/pyflink-walkthrough/blob/master/payment_msg_proccessing.py). The job maps the province id to province name for better demonstration using a Python UDF and then sums the payment for each province using a group aggregate. 
@@ -74,35 +88,18 @@ docker-compose down
 
 ## Run jobs
 
-1.Submit the PyFlink job.
+1. Submit the PyFlink job.
 ```shell script
 $ docker-compose exec jobmanager ./bin/flink run -py /opt/pyflink-walkthrough/payment_msg_proccessing.py -d
 ```
 
-2.Generate the input data for PyFlink job.
-
-```shell script
-docker-compose exec jobmanager python /opt/pyflink-walkthrough/generate_source_data.py
-```
-
-you can use the following command to read data in kafka and check whether the data is generated correctly.
-```shell script
-$ docker-compose exec kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic payment_msg
-{"createTime":"2020-07-27 09:25:32.77","orderId":1595841867217,"payAmount":7732.44,"payPlatform":0,"provinceId":3}
-{"createTime":"2020-07-27 09:25:33.231","orderId":1595841867218,"payAmount":75774.05,"payPlatform":0,"provinceId":3}
-{"createTime":"2020-07-27 09:25:33.72","orderId":1595841867219,"payAmount":65908.55,"payPlatform":0,"provinceId":0}
-{"createTime":"2020-07-27 09:25:34.216","orderId":1595841867220,"payAmount":15341.11,"payPlatform":0,"provinceId":1}
-{"createTime":"2020-07-27 09:25:34.698","orderId":1595841867221,"payAmount":37504.42,"payPlatform":0,"provinceId":0}
-```
-
-3.Open [kibana ui](http://localhost:5601) and choose the dashboard: payment_dashboard
-
+2. Open [kibana ui](http://localhost:5601) and choose the dashboard: payment_dashboard
 
 ![image](pic/dash_board.png)
 
 ![image](pic/final.png)
 
-4.Stop PyFlink job:
+3. Stop PyFlink job:
 
 Visit [http://localhost:8081/#/overview](http://localhost:8081/#/overview) , select the job and click `Cancle`.
 
