@@ -71,11 +71,7 @@ You can check if the playground was successfully started by accessing the WebUI 
 1. visiting Flink Web UI [http://localhost:8081](http://localhost:8081).
 2. visiting Elasticsearch [http://localhost:9200](http://localhost:9200).
 3. visiting Kibana [http://localhost:5601](http://localhost:5601).
-4. Import all configurations into Kibaba. The saved configurations are stored in file [export.ndjson](https://github.com/hequn8128/pyflink-walkthrough/blob/master/export.ndjson) under the root folder.
 
-![](./pic/import.png)
-
-![](./pic/import2.png)
 
 ### Stopping the Playground
 
